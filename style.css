@@ -98,8 +98,4 @@ body {
     background-color: #c0392b;
 }
 
-@media screen and (max-width : 500px){
-    .container{
-        min-width: 450px;
-    }
-}
+
