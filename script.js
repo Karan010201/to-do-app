@@ -1,31 +1,53 @@
-let inputTask = document.querySelector('.heading');
-let addBtn = document.querySelector('#addBtn');
-let taskList = document.querySelector('.list');
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.querySelector('#inputField');
+    const addBtn = document.querySelector('#addBtn');
+    const taskContainer = document.querySelector('#tasks');
 
-addBtn.addEventListener('click' , function () {
-    let task = inputTask.value.trim();
-    if(task === '') {
-        alert('Empty task, Please enter a task');
-        return;
-    }
+    addBtn.addEventListener('click', function () {
+        const inputTask = input.value.trim();
+        if (!inputTask) {
+            alert('Please enter a valid task.');
+            return;
+        }
 
-    //creating a list item element
-    let list = document.createElement('li');
-    list.textContent = task;
-    // console.log(list);
+        const list = document.createElement('li');
+        list.textContent = inputTask;
 
-    //append the list item to the task list
-    taskList.appendChild(list);
+        const editTaskDiv = document.createElement('div');
+        editTaskDiv.classList.add('task-actions');
 
-    //creating a delete task button
-    let deleteBtn = document.createElement('button');
-    deleteBtn.textContent = 'Delete Task';
+        // Create Buttons
+        const createButton = (icon, callback) => {
+            const btn = document.createElement('button');
+            btn.innerHTML = icon;
+            btn.classList.add('btn');
+            btn.addEventListener('click', callback);
+            return btn;
+        };
 
-    list.appendChild(deleteBtn);
+        const completeTask = createButton('<i class="fa-solid fa-check"></i>', () => {
+            list.style.textDecoration = 'line-through';
+        });
 
-    deleteBtn.addEventListener('click' , function() {
-        list.remove();
+        const editTask = createButton('<i class="fa-solid fa-pen-to-square"></i>', () => {
+            const updateTask = prompt('Edit Task:').trim();
+            if (!updateTask) {
+                alert('Please enter a valid task.');
+                return;
+            }
+            list.textContent = updateTask;
+            list.appendChild(editTaskDiv);
+        });
+
+        const deleteTask = createButton('<i class="fa-solid fa-trash"></i>', () => {
+            list.remove();
+        });
+
+        // Append Buttons to Div
+        editTaskDiv.append(completeTask, editTask, deleteTask);
+        list.appendChild(editTaskDiv);
+
+        taskContainer.appendChild(list);
+        input.value = '';
     });
-    inputTask.value = '';
-
-})
+});
